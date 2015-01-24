@@ -1,14 +1,26 @@
 package ke.co.turbosoft.tt.service;
 
-import java.util.List;
+import ke.co.turbosoft.tt.entity.User;
+import ke.co.turbosoft.tt.repo.UserRepo;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
-
-public interface AbstractService<T> {
+public abstract class AbstractService {
 	
-	List<T> findAll();
-	T findOne(Long id);
-	void delete(T t);
-	T save(T t);
+	final protected Logger logger =	
+			LoggerFactory.getLogger(this.getClass());
+	
+	@Autowired
+	protected UserRepo userRepo;
+	
+	protected final String USER_INVALID = "Not a valid user";
+	protected final String USER_NOT_ADMIN = "Not an admin user";
+	
+	protected boolean isValidUser(String username){
+		User user = userRepo.findOne(username);
+		return user != null;
+	}
 
 }

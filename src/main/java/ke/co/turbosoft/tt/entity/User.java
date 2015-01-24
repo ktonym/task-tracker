@@ -13,7 +13,7 @@ public class User {
 	private String last_name;
 	private String email;
 	private String password;
-	private char admin_role;
+	private String adminRole;
 	@OneToMany(mappedBy="user")
 	private List<TaskLog> tasklogs;
 	
@@ -61,12 +61,12 @@ public class User {
 		this.password = password;
 	}
 
-	public char getAdmin_role() {
-		return admin_role;
+	public String getAdminRole() {
+		return adminRole;
 	}
 
-	public void setAdmin_role(char admin_role) {
-		this.admin_role = admin_role;
+	public void setAdminRole(String adminRole) {
+		this.adminRole = adminRole;
 	}
 
 	public List<TaskLog> getTasklogs() {
@@ -77,6 +77,9 @@ public class User {
 		this.tasklogs = tasklogs;
 	}
 	
-		
-
+	public boolean isAdmin(){
+		return adminRole == null ? false : adminRole.equals('Y');
+	}
+	
+	
 }
