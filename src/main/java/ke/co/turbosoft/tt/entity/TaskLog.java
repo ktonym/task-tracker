@@ -9,7 +9,7 @@ public class TaskLog {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	private Long id;
+	private Integer id;
 	private String description;
 	@Convert(converter=LocalDatePersistenceConverter.class)
 	private LocalDate date;
@@ -23,10 +23,10 @@ public class TaskLog {
 	public TaskLog() {
 		super();
 	}
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 	public String getDescription() {

@@ -4,6 +4,6 @@ import ke.co.turbosoft.tt.entity.Company;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface CompanyRepo extends JpaRepository<Company, Long> {
+public interface CompanyRepo extends JpaRepository<Company, Integer> {
 
 }

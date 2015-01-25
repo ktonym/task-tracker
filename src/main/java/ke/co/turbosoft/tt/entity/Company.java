@@ -9,7 +9,7 @@ public class Company {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	private Long id;
+	private Integer id;
 	private String name;
 	@OneToMany(mappedBy="company")
 	private List<Project> projects;
@@ -18,11 +18,11 @@ public class Company {
 		super();
 	}
 
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

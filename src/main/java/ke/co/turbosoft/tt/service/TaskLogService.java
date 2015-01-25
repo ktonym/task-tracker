@@ -22,5 +22,5 @@ public interface TaskLogService {
 	
 	public Result<TaskLog> find(Integer idTaskLog, String actionUsername);
 	
-	public Result<List<TaskLog>> findAll(String actionUsername);
+	public Result<List<TaskLog>> findByUser(String username, LocalDate startDate, LocalDate endDate, String actionUsername);
 }
