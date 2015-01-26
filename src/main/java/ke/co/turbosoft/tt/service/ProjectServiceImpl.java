@@ -87,18 +87,81 @@ public class ProjectServiceImpl extends AbstractService implements ProjectServic
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
     @Override
     public Result<Project> remove(Integer idProject, String actionUsername) {
-        return null;
+
+        User actionUser = userRepo.findOne(actionUsername);
+
+        if(!actionUser.isAdmin()){
+            return ResultFactory.getFailResult(USER_NOT_ADMIN);
+        }
+
+        if(idProject==null){
+            return ResultFactory.getFailResult("Unable to remove " +
+              "Project [null idProject]");
+        }
+
+        Project project = projectRepo.findOne(idProject);
+
+        if(project==null){
+
+            return ResultFactory.getFailResult("Unable to fetch project with ID [ "+idProject+ " ] " +
+                    "for removal");
+
+        } else{
+
+            if(project.getTasks()==null || project.getTasks().isEmpty()){
+
+                projectRepo.delete(project);
+
+                String msg = "Project "+project.getName()+" was deleted by " +actionUser;
+
+                logger.info(msg);
+
+                return ResultFactory.getSuccessResult(msg);
+
+            } else {
+
+                return ResultFactory.getFailResult("Project has tasks and cannot be deleted");
+
+            }
+        }
+
+
+
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     @Override
     public Result<Project> find(Integer idProject, String actionUsername) {
-        return null;
+
+        if(isValidUser(actionUsername)){
+
+            Project project = projectRepo.findOne(idProject);
+
+            return ResultFactory.getSuccessResult(project);
+
+        }   else {
+
+            return ResultFactory.getFailResult(USER_INVALID);
+
+        }
+
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     @Override
     public Result<List<Project>> findAll(String actionUsername) {
-        return null;
+
+        if(isValidUser(actionUsername)){
+
+            List<Project> projectList = projectRepo.findAll();
+
+            return ResultFactory.getSuccessResult(projectList);
+
+        } else {
+
+            return ResultFactory.getFailResult(USER_INVALID);
+
+        }
+
     }
 }
