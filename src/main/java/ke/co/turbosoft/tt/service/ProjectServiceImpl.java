@@ -44,8 +44,8 @@ public class ProjectServiceImpl extends AbstractService implements ProjectServic
         Company company = companyRepo.findOne(idCompany);
 
         if(company==null){
-            return ResultFactory.getFailResult("Unable to store project without a valid company=" +
-            idCompany + "]");
+            return ResultFactory.getFailResult("Unable to store project without a valid company ID [ " +
+            idCompany + " ]");
         }
 
         Project project;

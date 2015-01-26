@@ -99,7 +99,7 @@ public class TaskServiceImpl extends AbstractService implements TaskService {
         } else {
 
             Task task = taskRepo.findOne(idTask);
-            long taskLogCount = taskLogRepo.CountByTask(task);
+            long taskLogCount = taskLogRepo.countByTask(task);
 
             if(task==null){
                 return ResultFactory.getFailResult("Unable to load Task for removal with idTask=" + idTask);

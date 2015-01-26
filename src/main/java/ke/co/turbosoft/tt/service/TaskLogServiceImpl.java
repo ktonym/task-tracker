@@ -51,7 +51,7 @@ public class TaskLogServiceImpl extends AbstractService implements TaskLogServic
         }
 
         if( !actionUser.isAdmin() && !taskUser.equals(actionUser)){
-            return ResultFactory.getFailResult("User performing save must be an admin user of saving their own record");
+            return ResultFactory.getFailResult("User performing save must be an admin user or saving their own record");
         }
 
         TaskLog taskLog;
