@@ -49,7 +49,7 @@ public class CompanyServiceImpl extends AbstractService implements CompanyServic
 
         }
 
-        company.setName(companyName);
+        company.setCompanyName(companyName);
 
         companyRepo.save(company);
 
@@ -81,7 +81,7 @@ public class CompanyServiceImpl extends AbstractService implements CompanyServic
                     company.getProjects().isEmpty()){
                 companyRepo.delete(company);
 
-                String msg = "Company " + company.getName()
+                String msg = "Company " + company.getCompanyName()
                         + " was deleted by " + actionUsername;
                 logger.info(msg);
                 return ResultFactory.getSuccessResult(msg);

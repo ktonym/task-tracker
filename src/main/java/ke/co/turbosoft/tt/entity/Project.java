@@ -1,16 +1,16 @@
 package ke.co.turbosoft.tt.entity;
 
+import javax.json.JsonObjectBuilder;
+import javax.persistence.*;
 import java.util.List;
 
-import javax.persistence.*;
-
 @Entity
-public class Project {
+public class Project extends AbstractEntity {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	private Integer id;
-	private String name;
+	private Integer idProject;
+	private String projectName;
 	@ManyToOne
 	@JoinColumn(name="id_company")
 	private Company company;
@@ -21,20 +21,20 @@ public class Project {
 		super();
 	}
 
-	public Integer getId() {
-		return id;
+	public Integer getIdProject() {
+		return idProject;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
+	public void setIdProject(Integer idProject) {
+		this.idProject = idProject;
 	}
 
-	public String getName() {
-		return name;
+	public String getProjectName() {
+		return projectName;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
 	}
 
 	public Company getCompany() {
@@ -52,7 +52,16 @@ public class Project {
 	public void setTasks(List<Task> tasks) {
 		this.tasks = tasks;
 	}
-	
-	
 
+
+    @Override
+    public void addJson(JsonObjectBuilder builder) {
+        builder.add("idProject",idProject)
+                .add("projectName", projectName);
+
+        if(company!=null){
+            company.addJson(builder);
+        }
+
+    }
 }

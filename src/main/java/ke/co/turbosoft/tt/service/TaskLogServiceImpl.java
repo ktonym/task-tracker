@@ -66,10 +66,10 @@ public class TaskLogServiceImpl extends AbstractService implements TaskLogServic
         }
 
         taskLog.setTask(task);
-        taskLog.setDescription(taskDescription);
-        taskLog.setDate(taskLogDate);
+        taskLog.setTaskDescription(taskDescription);
+        taskLog.setTaskLogDate(taskLogDate);
         taskLog.setUser(taskUser);
-        taskLog.setMinutes(taskMinutes);
+        taskLog.setTaskMinutes(taskMinutes);
 
         taskLogRepo.save(taskLog);
 

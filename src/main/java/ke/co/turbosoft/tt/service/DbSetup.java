@@ -20,11 +20,11 @@ public class DbSetup {
 	public void init(){
 		
 		Company com1=new Company();
-		com1.setName("Turbosoft Tech Solutions");
+		com1.setCompanyName("Turbosoft Tech Solutions");
 		repo.save(com1);
 		
 		Company com2=new Company();
-		com2.setName("Espa Business Solutions");
+		com2.setCompanyName("Espa Business Solutions");
 		repo.save(com2);
 	
 	}

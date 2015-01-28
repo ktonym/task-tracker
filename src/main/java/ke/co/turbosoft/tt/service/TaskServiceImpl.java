@@ -76,7 +76,7 @@ public class TaskServiceImpl extends AbstractService implements TaskService {
             }
         }
 
-        task.setName(taskName);
+        task.setTaskName(taskName);
 
         taskRepo.save(task);
 
@@ -114,7 +114,7 @@ public class TaskServiceImpl extends AbstractService implements TaskService {
 
                 project.getTasks().remove(task);
 
-                String msg = "Task " + task.getName() + " was deleted by " + actionUsername;
+                String msg = "Task " + task.getTaskName() + " was deleted by " + actionUsername;
 
                 logger.info(msg);
 

@@ -1,16 +1,16 @@
 package ke.co.turbosoft.tt.entity;
 
+import javax.json.JsonObjectBuilder;
+import javax.persistence.*;
 import java.util.List;
 
-import javax.persistence.*;
-
 @Entity
-public class Task {
+public class Task extends AbstractEntity{
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	private Integer id;
-	private String name;
+	private Integer idTask;
+	private String taskName;
 	@ManyToOne
 	@JoinColumn(name="id_project")
 	private Project project;
@@ -21,20 +21,20 @@ public class Task {
 		super();
 	}
 
-	public Integer getId() {
-		return id;
+	public Integer getIdTask() {
+		return idTask;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
+	public void setIdTask(Integer idTask) {
+		this.idTask = idTask;
 	}
 
-	public String getName() {
-		return name;
+	public String getTaskName() {
+		return taskName;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setTaskName(String taskName) {
+		this.taskName = taskName;
 	}
 
 	public Project getProject() {
@@ -51,7 +51,22 @@ public class Task {
 
 	public void setTasklogs(List<TaskLog> tasklogs) {
 		this.tasklogs = tasklogs;
-	}	
-	
-	
+	}
+
+
+    @Override
+    public void addJson(JsonObjectBuilder builder) {
+
+        builder.add("idTask",idTask)
+                .add("taskName", taskName);
+
+        if(project!=null){
+            project.addJson(builder);
+
+            Company company = project.getCompany();
+            company.addJson(builder);
+
+        }
+
+    }
 }

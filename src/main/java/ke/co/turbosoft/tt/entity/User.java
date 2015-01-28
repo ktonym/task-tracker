@@ -1,11 +1,13 @@
 package ke.co.turbosoft.tt.entity;
 
+import javax.json.JsonObjectBuilder;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import java.util.List;
 
-import javax.persistence.*;
-
 @Entity
-public class User {
+public class User extends AbstractEntity{
 	
 	@Id
 	private String username;
@@ -80,6 +82,15 @@ public class User {
 	public boolean isAdmin(){
 		return adminRole == null ? false : adminRole.equals('Y');
 	}
-	
-	
+
+
+    @Override
+    public void addJson(JsonObjectBuilder builder) {
+        builder.add("username",username)
+                .add("firstName", firstName)
+                .add("lastName",lastName)
+                .add("email",email)
+                .add("adminRole", adminRole+"")
+                .add("fullName", firstName + " " + lastName);
+    }
 }

@@ -76,7 +76,7 @@ public class ProjectServiceImpl extends AbstractService implements ProjectServic
 
         }
 
-        project.setName(projectName);
+        project.setProjectName(projectName);
 
         projectRepo.save(project);
 
@@ -112,7 +112,7 @@ public class ProjectServiceImpl extends AbstractService implements ProjectServic
 
                 projectRepo.delete(project);
 
-                String msg = "Project "+project.getName()+" was deleted by " +actionUser;
+                String msg = "Project "+project.getProjectName()+" was deleted by " +actionUser;
 
                 logger.info(msg);
 
