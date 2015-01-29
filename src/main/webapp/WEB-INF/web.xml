@@ -15,7 +15,7 @@
 	<!-- Map all requests to the DispatcherServlet for handling -->
 	<servlet-mapping>
 		<servlet-name>dispatcher</servlet-name>
-		<url-pattern>/</url-pattern>
+		<url-pattern>/ttt/*</url-pattern>
 	</servlet-mapping>
 	
 	<!-- needed for ContextLoaderListener -->

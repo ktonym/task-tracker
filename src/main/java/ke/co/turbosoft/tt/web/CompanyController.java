@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.json.JsonObject;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 import static ke.co.turbosoft.tt.web.SecurityHelper.getSessionUser;
 
@@ -79,5 +80,48 @@ public class CompanyController extends AbstractController {
         }
     }
 
+    @RequestMapping(value = "/findAll", method = RequestMethod.GET, produces = {"application/json"})
+    @ResponseBody
+    public String findAll(HttpServletRequest request){
 
+        User sessionUser = getSessionUser(request);
+
+        if(sessionUser==null){
+            return getJsonErrorMsg("User is not logged on");
+        }
+
+        Result<List<Company>> ar = companyService.findAll(sessionUser.getUsername());
+
+        if(ar.isSuccess()){
+            return getJsonSuccessData(ar.getData());
+        } else {
+            return getJsonErrorMsg(ar.getMsg());
+        }
+    }
+
+    @RequestMapping(value = "/remove", method = RequestMethod.POST, produces = {"application/json"})
+    @ResponseBody
+    public String remove(@RequestParam(value = "data",required = true) String jsonData,
+                         HttpServletRequest request) {
+        User sessionUser = getSessionUser(request);
+
+        if(sessionUser==null){
+            return getJsonErrorMsg("User is not logged on");
+        }
+
+        JsonObject jsonObj = parseJsonObject(jsonData);
+
+        Result<Company> ar = companyService.remove(
+                getIntegerValue(jsonObj.get("idCompany")),
+                sessionUser.getUsername());
+
+        if(ar.isSuccess()){
+
+            return getJsonSuccessMsg(ar.getMsg());
+
+        } else {
+            return getJsonErrorMsg(ar.getMsg());
+        }
+
+    }
 }
