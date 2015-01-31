@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import static ke.co.turbosoft.tt.web.SecurityHelper.getSessionUser;
 
@@ -31,7 +32,7 @@ public class TaskLogController extends AbstractController {
     @InitBinder
     public void initBinder(WebDataBinder binder){
 
-        binder.registerCustomEditor(LocalDate.class,new LocalDateEditor());
+        binder.registerCustomEditor(LocalDate.class,new LocalDateEditor(DATE_FORMAT_yyyyMMdd,true));
 
     }
 
@@ -79,6 +80,49 @@ public class TaskLogController extends AbstractController {
         } else {
             return getJsonErrorMsg(ar.getMsg());
         } 
+    }
+
+    @RequestMapping(value = "/remove",method = RequestMethod.POST, produces = {"application/json"})
+    @ResponseBody
+    public String remove(
+            @RequestParam(value = "data",required = true) String jsonData,
+            HttpServletRequest request){
+
+        User sessionUser=getSessionUser(request);
+
+        JsonObject jsonObj = parseJsonObject(jsonData);
+
+        Result<TaskLog> ar = taskLogService.remove(
+                getIntegerValue(jsonObj.get("idTaskLog")),
+                sessionUser.getUsername());
+
+        if(ar.isSuccess()){
+            return getJsonSuccessData(ar.getData());
+        } else {
+            return getJsonErrorMsg(ar.getMsg());
+        }
+    }
+
+    @RequestMapping(value = "/findByUser",method = RequestMethod.GET,produces = {"application/json"})
+    @ResponseBody
+    public String findByUser(@RequestParam(value = "username",required = true) String username,
+                             @RequestParam(value = "startDate", required = true) LocalDate startDate,
+                             @RequestParam(value = "endDate", required = true) LocalDate endDate,
+                             HttpServletRequest request){
+
+        User sessionUser=getSessionUser(request);
+
+        Result<List<TaskLog>> ar = taskLogService.findByUser(
+                username,
+                startDate,
+                endDate,
+                sessionUser.getUsername());
+
+        if(ar.isSuccess()){
+            return getJsonSuccessData(ar.getData());
+        } else {
+            return getJsonErrorMsg(ar.getMsg());
+        }
     }
 
 
