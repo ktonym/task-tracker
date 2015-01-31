@@ -29,6 +29,7 @@ public class TaskLogController extends AbstractController {
 
     @Autowired
     protected TaskLogService taskLogService;
+
     @InitBinder
     public void initBinder(WebDataBinder binder){
 

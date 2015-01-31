@@ -15,9 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 
-/**
- * Created by ktonym on 1/25/15.
- */
+
 @Transactional
 @Service("taskLogService")
 public class TaskLogServiceImpl extends AbstractService implements TaskLogService {
@@ -152,7 +150,7 @@ public class TaskLogServiceImpl extends AbstractService implements TaskLogServic
         }
 
         if(actionUser.isAdmin() || taskUser.equals(actionUser)){
-            List<TaskLog> taskLogs = taskLogRepo.findByUserAndDateBetween(taskUser,startDate,endDate);
+            List<TaskLog> taskLogs = taskLogRepo.findByUserAndTaskLogDateBetween(taskUser,startDate,endDate);
             return ResultFactory.getSuccessResult(taskLogs);
         }   else{
             return ResultFactory.getFailResult("Unable to find task logs. User does not have permission with username=" + username);
