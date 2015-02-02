@@ -42,7 +42,7 @@ Ext.define('TTT.controller.MainController', {
         if (me.getUsernameField().validate() &&
             me.getPasswordField().validate()){
             Ext.Ajax.request({
-                url: 'ttt/security/logon.json',
+                url: 'security/logon.json',
                 params: {
                     username: me.getUsernameField().getValue(),
                     password: me.getPasswordField().getValue()
@@ -66,7 +66,7 @@ Ext.define('TTT.controller.MainController', {
         Ext.Msg.confirm('Confirm Logout', 'Are you sure you want to log out of 3T?', function(button){
            if(button === 'yes'){
                Ext.Ajax.request({
-                   url: 'ttt/security/logout.json',
+                   url: 'security/logout.json',
                    success: function(){
                        window.location.reload();
                    }

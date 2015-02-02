@@ -4,7 +4,7 @@ Ext.define('TTT.store.User',{
     model: 'TTT.model.User',
     proxy: {
         type: 'ajax',
-        url: 'ttt/user/findAll.json',
+        url: 'user/findAll.json',
         reader: {
             type: 'json',
             root: 'data'

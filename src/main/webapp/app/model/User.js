@@ -16,10 +16,10 @@ Ext.define('TTT.model.User', {
         type: 'ajax',
         idParam:'username',
         api:{
-            create:'ttt/user/store.json',
-            read:'ttt/user/find.json',
-            update:'ttt/user/store.json',
-            delete:'ttt/user/remove.json'
+            create:'user/store.json',
+            read:'user/find.json',
+            update:'user/store.json',
+            delete:'user/remove.json'
         },
         reader: {
             type: 'json',

@@ -80,6 +80,8 @@ Ext.define('TTT.controller.UserController', {
                             // the record is not yet in store
                             me.getUserList().
                                 getStore().add(record);
+                            // select the user in the grid
+                            me.getUserList().getSelectionModel().select(record,true);
                         }
                         me.getUserFormFieldset().setTitle('Edit User ' +
                             record.get('username'));
@@ -101,8 +103,7 @@ Ext.define('TTT.controller.UserController', {
         var me = this;
         var rec = me.getUserForm().getRecord();
         Ext.Msg.confirm('Confirm Delete User', 'Are you sure you want to delete user ' +
-            rec.get('fullName') + '?',
-            function(btn){
+            rec.data.fullName + '?', function(btn){
             if(btn === 'yes'){
                 rec.destroy({
                    failure: function(rec,operation){
