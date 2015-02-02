@@ -53,7 +53,17 @@ public class UserServiceImpl extends AbstractService implements UserService {
             }
 
             user.setUsername(username);
+            user.setAdminRole(adminRole);
 
+        }   else {
+
+            if (actionUser.getUsername() != username || !actionUser.isAdmin()){
+                 return ResultFactory.getFailResult("Only an admin user can update another user's credentials");
+            }
+
+            if(actionUser.isAdmin()){
+                user.setAdminRole(adminRole);
+            }
         }
 
 
@@ -61,7 +71,7 @@ public class UserServiceImpl extends AbstractService implements UserService {
         user.setFirstName(firstName);
         user.setLastName(lastName);
         user.setPassword(password);
-        user.setAdminRole(adminRole);
+
 
         userRepo.save(user);
 
@@ -143,9 +153,9 @@ public class UserServiceImpl extends AbstractService implements UserService {
         User user = userRepo.findOne(username);
 
         if(user==null){
-            return ResultFactory.getFailResult("Wrong credentials");
+            return ResultFactory.getFailResult("Unable to verify username/password combination");
         }  else if(!user.getPassword().equals(password)){
-            return ResultFactory.getFailResult("Wrong credentials");
+            return ResultFactory.getFailResult("Unable to verify username/password combination");
         }  else{
                return ResultFactory.getSuccessResult(user);
         }

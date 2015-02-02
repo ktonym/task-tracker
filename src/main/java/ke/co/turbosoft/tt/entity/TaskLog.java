@@ -4,6 +4,7 @@ import javax.json.JsonObjectBuilder;
 import javax.persistence.*;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 public class TaskLog extends AbstractEntity {
@@ -22,7 +23,7 @@ public class TaskLog extends AbstractEntity {
 	@JoinColumn(name="username")
 	private User user;
 
-    static final SimpleDateFormat DATE_FORMAT_yyyyMMdd = new SimpleDateFormat("yyyyMMdd");
+    static final DateTimeFormatter DATE_FORMAT_yyyyMMdd = DateTimeFormatter.ofPattern("yyyyMMdd");
 
 	public TaskLog() {
 		super();
@@ -71,6 +72,7 @@ public class TaskLog extends AbstractEntity {
                 .add("taskDescription", taskDescription)
                 .add("taskLogDate", taskLogDate==null ? "" : DATE_FORMAT_yyyyMMdd.format(taskLogDate))
                 .add("taskMinutes", taskMinutes);
+
 
         if(user!=null){
             user.addJson(builder);
