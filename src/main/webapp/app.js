@@ -6,6 +6,5 @@
 
 Ext.application({
     name: 'TTT',
-
     extend: 'TTT.Application'
 });

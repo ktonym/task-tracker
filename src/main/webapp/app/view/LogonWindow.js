@@ -1,6 +1,6 @@
 Ext.define("TTT.view.LogonWindow", {
     extend: 'Ext.window.Window',
-    xtype: 'logonWindow',
+    xtype: 'logonwindow',
     closable: false,
     iconCls: 'logo-small',
     width: 300,

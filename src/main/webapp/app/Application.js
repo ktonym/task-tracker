@@ -1,14 +1,9 @@
 Ext.define('TTT.Application', {
     name: 'TTT',
-
     extend: 'Ext.app.Application',
-
     requires: ['TTT.view.Viewport','TTT.view.LogonWindow'],
-
     models:  ['User'],
-
     controllers: ['MainController','UserController'],
-
     stores: ['User'],
 
     init: function(application){

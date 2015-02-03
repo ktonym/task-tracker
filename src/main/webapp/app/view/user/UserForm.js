@@ -37,7 +37,7 @@ Ext.define("TTT.view.user.UserForm", {
                     name:   'email',
                     fieldLabel: 'Email'
                 },{
-                    xtype:  'password',
+                    xtype:  'textfield',
                     name:   'password',
                     inputType: 'password',
                     fieldLabel: 'Password'
