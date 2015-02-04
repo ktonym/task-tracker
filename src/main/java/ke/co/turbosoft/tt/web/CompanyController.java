@@ -35,10 +35,6 @@ public class CompanyController extends AbstractController {
 
         User sessionUser = getSessionUser(request);
 
-        if(sessionUser == null ){
-            return getJsonErrorMsg("User is not logged on");
-        }
-
         Result<Company> ar = companyService.find(idCompany, sessionUser.getUsername());
 
         if(ar.isSuccess()){
@@ -58,10 +54,6 @@ public class CompanyController extends AbstractController {
     public String store(@RequestParam(value = "data", required = true) String jsonData, HttpServletRequest request){
 
         User sessionUser = getSessionUser(request);
-
-        if(sessionUser==null){
-            return getJsonErrorMsg("User is not logged on");
-        }
 
         JsonObject jsonObj = parseJsonObject(jsonData);
 
@@ -86,10 +78,6 @@ public class CompanyController extends AbstractController {
 
         User sessionUser = getSessionUser(request);
 
-        if(sessionUser==null){
-            return getJsonErrorMsg("User is not logged on");
-        }
-
         Result<List<Company>> ar = companyService.findAll(sessionUser.getUsername());
 
         if(ar.isSuccess()){
@@ -104,10 +92,6 @@ public class CompanyController extends AbstractController {
     public String remove(@RequestParam(value = "data",required = true) String jsonData,
                          HttpServletRequest request) {
         User sessionUser = getSessionUser(request);
-
-        if(sessionUser==null){
-            return getJsonErrorMsg("User is not logged on");
-        }
 
         JsonObject jsonObj = parseJsonObject(jsonData);
 

@@ -61,7 +61,7 @@ public class UserController extends AbstractController {
 
     @RequestMapping(value = "/store", method = RequestMethod.POST, produces = {"application/json"})
     @ResponseBody
-    public String store(@RequestParam(value = "data") String jsonData,
+    public String store(@RequestParam(value = "data",required = true) String jsonData,
                         HttpServletRequest request){
 
         User sessionUser = getSessionUser(request);
@@ -78,6 +78,8 @@ public class UserController extends AbstractController {
                 sessionUser.getUsername());
 
         if(ar.isSuccess()){
+            // TODO find out why this section fails with NullPointerException
+            System.out.println(ar.toString());
             return getJsonSuccessData(ar.getData());
         } else {
             return getJsonErrorMsg(ar.getMsg());

@@ -29,10 +29,6 @@ public class ProjectController extends AbstractController {
             HttpServletRequest request){
         User sessionUser = getSessionUser(request);
 
-        if(sessionUser==null){
-            return getJsonErrorMsg("User is not logged on");
-        }
-
         Result<Project> ar = projectService.find(idProject,sessionUser.getUsername());
 
         if(ar.isSuccess()){
@@ -50,10 +46,6 @@ public class ProjectController extends AbstractController {
             HttpServletRequest request ){
 
         User sessionUser = getSessionUser(request);
-
-        if(sessionUser==null){
-            return getJsonErrorMsg("User is not logged on");
-        }
 
         JsonObject jsonObj = parseJsonObject(jsonData);
 
@@ -77,9 +69,6 @@ public class ProjectController extends AbstractController {
 
         User sessionUser = getSessionUser(request);
 
-        if(sessionUser==null){
-            return getJsonErrorMsg("User is not logged on");
-        }
         JsonObject jsonObj = parseJsonObject(jsonData);
 
         Result<Project> ar = projectService.remove(getIntegerValue(jsonObj.get("idProject")),sessionUser.getUsername());
@@ -96,10 +85,6 @@ public class ProjectController extends AbstractController {
     public String findAll(HttpServletRequest request){
 
         User sessionUser = getSessionUser(request);
-
-        if(sessionUser==null){
-            return getJsonErrorMsg("User is not logged on");
-        }
 
         Result<List<Project>> ar = projectService.findAll(sessionUser.getUsername());
 

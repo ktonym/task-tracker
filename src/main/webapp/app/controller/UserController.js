@@ -47,23 +47,20 @@ Ext.define('TTT.controller.UserController', {
         });
     },
     doInitStore: function(){
-        this.getUseList().getStore().load();
+        this.getUserList().getStore().load();
     },
     doAddUser: function(){
         var me = this;
         me.getUserFormFieldset().setTitle('Add New User');
         me.getUsernameField().enable();
-        var newUserRec = Ext.create('TTT.model.User',{
-            adminRole: 'N'
-        });
+        var newUserRec = Ext.create('TTT.model.User',{adminRole: 'N'});
         me.getUserForm().loadRecord(newUserRec);
         me.getDeleteUserButton().disable();
     },
     doSelectUser: function(grid, record){
         var me = this;
         me.getUserForm().loadRecord(record);
-        me.getUserFormFieldset().setTitle('Edit User ' +
-            record.get('username') );
+        me.getUserFormFieldset().setTitle('Edit User ' + record.data.username);
         me.getUsernameField().disable();
         me.getDeleteUserButton().enable();
     },
@@ -78,19 +75,16 @@ Ext.define('TTT.controller.UserController', {
                     success: function(record, operation){
                         if (typeof record.store === 'undefined'){
                             // the record is not yet in store
-                            me.getUserList().
-                                getStore().add(record);
+                            me.getUserList().getStore().add(record);
                             // select the user in the grid
                             me.getUserList().getSelectionModel().select(record,true);
                         }
-                        me.getUserFormFieldset().setTitle('Edit User ' +
-                            record.get('username'));
+                        me.getUserFormFieldset().setTitle('Edit User ' + record.data.username);
                         me.getUsernameField().disable();
                         me.getDeleteUserButton().enable();
                     },
                     failure: function(rec, operation){
-                        Ext.Msg.alert('Save Failure', operation.request.scope.
-                                    reader.jsonData.msg);
+                        Ext.Msg.alert('Save Failure', operation.request.scope.reader.jsonData.msg);
                     }
                 });
             } else {
@@ -103,7 +97,7 @@ Ext.define('TTT.controller.UserController', {
         var me = this;
         var rec = me.getUserForm().getRecord();
         Ext.Msg.confirm('Confirm Delete User', 'Are you sure you want to delete user ' +
-            rec.data.fullName + '?', function(btn){
+            rec.get('fullName') + '?', function(btn){
             if(btn === 'yes'){
                 rec.destroy({
                    failure: function(rec,operation){

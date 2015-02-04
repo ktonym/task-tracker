@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Created by akipkoech on 1/28/15.
  */
-public class AbstractController {
+public abstract class AbstractController {
 
     protected final Logger logger= LoggerFactory.getLogger(this.getClass());
 

@@ -57,13 +57,19 @@ public class UserServiceImpl extends AbstractService implements UserService {
 
         }   else {
 
-            if (actionUser.getUsername() != username || !actionUser.isAdmin()){
-                 return ResultFactory.getFailResult("Only an admin user can update another user's credentials");
+            if (username != actionUsername && !actionUser.isAdmin()){
+                return ResultFactory.getFailResult("Only an administrator can update another user!");
             }
+
+
+//            if (actionUser.getUsername() != username || !actionUser.isAdmin()){
+//                 return ResultFactory.getFailResult("Only an admin user can update another user's credentials");
+//            }
 
             if(actionUser.isAdmin()){
                 user.setAdminRole(adminRole);
             }
+
         }
 
 
