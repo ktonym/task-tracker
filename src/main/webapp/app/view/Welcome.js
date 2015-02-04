@@ -4,7 +4,7 @@ Ext.define("TTT.view.Welcome", {
     requires: ['Ext.XTemplate'],
     initComponent: function(){
         var me = this;
-        var tpl = new Ext.XTemplate('<tpl for=".">','<p>Welcome' +
+        var tpl = new Ext.XTemplate('<tpl for=".">','<p>Welcome ' +
             '<b>{fullName}</b>!</p>','<p>You are logged on as {username} [{email}]</p>',
             '</tpl>');
         var welcomeHtml =

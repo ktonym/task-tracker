@@ -51,7 +51,7 @@ Ext.define('TTT.controller.UserController', {
     },
     doAddUser: function(){
         var me = this;
-        me.getUserFormFieldSet().setTitle('Add New User');
+        me.getUserFormFieldset().setTitle('Add New User');
         me.getUsernameField().enable();
         var newUserRec = Ext.create('TTT.model.User',{
             adminRole: 'N'
