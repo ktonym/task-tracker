@@ -12,6 +12,7 @@ import java.util.List;
 public interface TaskLogRepo extends JpaRepository<TaskLog, Integer> {
 
      long countByTask(Task task);
+     long countByUser(User user);
      List<TaskLog> findByUserAndTaskLogDateBetween(User user, LocalDate startDate, LocalDate endDate);
 
 }

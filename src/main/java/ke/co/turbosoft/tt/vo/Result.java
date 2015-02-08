@@ -22,6 +22,12 @@ public class Result<T> implements Serializable {
         this.msg = msg;
     }
 
+//    Result(T data, String msg){
+//        this.data = data;
+//        this.success = true;
+//        this.msg = msg;
+//    }
+
     public boolean isSuccess(){
         return success;
     }
@@ -60,6 +66,8 @@ public class Result<T> implements Serializable {
         } else {
             sb.append(data.toString());
         }
+
+        sb.append("}");
 
         return sb.toString();
     }

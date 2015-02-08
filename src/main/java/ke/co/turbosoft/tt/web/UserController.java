@@ -78,11 +78,13 @@ public class UserController extends AbstractController {
                 sessionUser.getUsername());
 
         if(ar.isSuccess()){
-            // TODO find out why this section fails with NullPointerException
-            System.out.println(ar.toString());
+
             return getJsonSuccessData(ar.getData());
+
         } else {
+
             return getJsonErrorMsg(ar.getMsg());
+
         }
 
     }

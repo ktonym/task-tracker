@@ -503,6 +503,46 @@
         "controllerNamespace": "TTT.controller",
         "controllerFileName": "MainController"
       }
+    },
+    "app/view/ManageTaskLogs.js": {
+      "source": "{viewFileName}.js.tpl.merge",
+      "version": "acde5ea901286ca2f976bcddea23e159dbaa0e6f",
+      "parameters": {
+        "viewName": "ManageTaskLogs",
+        "viewFileName": "ManageTaskLogs",
+        "appName": "TTT",
+        "name": "ManageTaskLogs"
+      }
+    },
+    "app/view/tasklog/ManageTaskLogs.js": {
+      "source": "{viewFileName}.js.tpl.merge",
+      "version": "acde5ea901286ca2f976bcddea23e159dbaa0e6f",
+      "parameters": {
+        "viewName": "tasklog.ManageTaskLogs",
+        "viewFileName": "tasklog/ManageTaskLogs",
+        "appName": "TTT",
+        "name": "tasklog.ManageTaskLogs"
+      }
+    },
+    "app/view/tasklog/TaskLogForm.js": {
+      "source": "{viewFileName}.js.tpl.merge",
+      "version": "acde5ea901286ca2f976bcddea23e159dbaa0e6f",
+      "parameters": {
+        "viewName": "tasklog.TaskLogForm",
+        "viewFileName": "tasklog/TaskLogForm",
+        "appName": "TTT",
+        "name": "tasklog.TaskLogForm"
+      }
+    },
+    "app/view/tasklog/TaskLogList.js": {
+      "source": "{viewFileName}.js.tpl.merge",
+      "version": "acde5ea901286ca2f976bcddea23e159dbaa0e6f",
+      "parameters": {
+        "viewName": "tasklog.TaskLogList",
+        "viewFileName": "tasklog/TaskLogList",
+        "appName": "TTT",
+        "name": "tasklog.TaskLogList"
+      }
     }
   }
 }

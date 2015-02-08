@@ -1,7 +1,7 @@
 package ke.co.turbosoft.tt.service;
 
 import ke.co.turbosoft.tt.entity.User;
-import ke.co.turbosoft.tt.repo.UserRepo;
+import ke.co.turbosoft.tt.repo.TaskLogRepo;
 import ke.co.turbosoft.tt.vo.Result;
 import ke.co.turbosoft.tt.vo.ResultFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,15 +12,14 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 /**
- * Created by ktonym on 1/25/15.
+ * Created by ktonym on 2/8/15.
  */
-
 @Transactional
 @Service("userService")
 public class UserServiceImpl extends AbstractService implements UserService {
 
     @Autowired
-    protected UserRepo userRepo;
+    protected TaskLogRepo taskLogRepo;
 
     public UserServiceImpl() {
         super();
@@ -28,63 +27,79 @@ public class UserServiceImpl extends AbstractService implements UserService {
 
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
     @Override
-    public Result<User> store(String username,
-                              String firstName,
-                              String lastName,
-                              String email,
-                              String password,
-                              Character adminRole,
-                              String actionUsername) {
-
-
-        if (actionUsername==null||"".equals(actionUsername)){
-            return ResultFactory.getFailResult("Cannot verify identity of user");
-        }
+    public Result<User> store(
+            String username,
+            String firstName,
+            String lastName,
+            String email,
+            String password,
+            Character adminRole,
+            String actionUsername) {
 
         User actionUser = userRepo.findOne(actionUsername);
 
+        if(!actionUser.isAdmin()){
+            return ResultFactory.getFailResult(USER_NOT_ADMIN);
+        }
+
+        if(username==null || username.trim().isEmpty() || email == null || email.trim().isEmpty()){
+            return ResultFactory.getFailResult("Unable to store a user without a valid non-empty username/email");
+        }
+
+        if(password==null || password.length()==0){
+            return ResultFactory.getFailResult("Unable to store a user without a valid non-empty password");
+        }
+
+        if(!adminRole.equals('Y')&&!adminRole.equals('N')){
+            return ResultFactory.getFailResult("Unable to store the user: adminRole must be Y or N");
+        }
+
+        username = username.trim();
+        email = email.trim();
+
         User user = userRepo.findOne(username);
 
-        if(user==null){
-            user = new User();
+        User testByEmailUser = userRepo.findByEmail(email);
 
-            if(!actionUser.isAdmin()) {
-                return ResultFactory.getFailResult(USER_NOT_ADMIN);
+        if(user == null){
+
+
+            if(testByEmailUser == null){
+
+                user = new User();
+                user.setUsername(username);
+                user.setEmail(email);
+
+            } else {
+
+                return ResultFactory.getFailResult("Unable to add new user: email address is already in use");
+
             }
 
-            user.setUsername(username);
-            user.setAdminRole(adminRole);
+        } else {
 
-        }   else {
+            if(testByEmailUser == null){
 
-            if (username != actionUsername && !actionUser.isAdmin()){
-                return ResultFactory.getFailResult("Only an administrator can update another user!");
-            }
+                user.setEmail(email);
 
+            } else if (!user.equals(testByEmailUser)){
 
-//            if (actionUser.getUsername() != username || !actionUser.isAdmin()){
-//                 return ResultFactory.getFailResult("Only an admin user can update another user's credentials");
-//            }
+                return ResultFactory.getFailResult("The email address is already in use by username="
+                        + testByEmailUser.getEmail()
+                        + " and cannot be assigned to " + username);
 
-            if(actionUser.isAdmin()){
-                user.setAdminRole(adminRole);
             }
 
         }
 
-
-        user.setEmail(email);
         user.setFirstName(firstName);
         user.setLastName(lastName);
         user.setPassword(password);
-
+        user.setAdminRole(adminRole);
 
         userRepo.save(user);
 
-        String msg = "User " + username + " saved successfully by " + actionUsername;
-
-        return ResultFactory.getSuccessResult(user,msg);
-
+        return ResultFactory.getSuccessResult(user);
 
     }
 
@@ -93,24 +108,43 @@ public class UserServiceImpl extends AbstractService implements UserService {
     public Result<User> remove(String username, String actionUsername) {
 
         User actionUser = userRepo.findOne(actionUsername);
-        User affectedUser = userRepo.findOne(username);
 
         if(!actionUser.isAdmin()){
+
             return ResultFactory.getFailResult(USER_NOT_ADMIN);
+
         }
 
+        if(actionUsername.equalsIgnoreCase(username)){
+
+            return ResultFactory.getFailResult("It is not allowed to delete yourself!");
+
+        }
+
+        if(username == null ){
+
+            return ResultFactory.getFailResult("Unable to remove null user");
+
+        }
+
+        User affectedUser = userRepo.findOne(username);
+        long taskLogCount = taskLogRepo.countByUser(affectedUser);
+
         if(affectedUser==null){
+
             return ResultFactory.getFailResult("Unable to obtain user [ " + username + " ] for deletion");
-        }  else if (actionUser.equals(affectedUser)){
-            return ResultFactory.getFailResult("Cannot delete oneself!");
-        }   else{
-            if(affectedUser.getTasklogs().isEmpty())  {
-                userRepo.delete(affectedUser);
-                String msg = "User " + username + " successfully deleted by " + actionUsername;
-                return ResultFactory.getSuccessResult(msg);
-            }   else{
+
+        } else if(taskLogCount > 0)  {
+
                 return ResultFactory.getFailResult("User has task logs");
-            }
+
+        } else{
+
+                userRepo.delete(affectedUser);
+                String msg = "User " + username + " was deleted by " + actionUsername;
+                logger.info(msg);
+                return ResultFactory.getSuccessResult(msg);
+
         }
 
     }
@@ -118,33 +152,31 @@ public class UserServiceImpl extends AbstractService implements UserService {
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     @Override
     public Result<User> find(String username, String actionUsername) {
+
         if(isValidUser(actionUsername)){
+
             User user = userRepo.findOne(username);
             return ResultFactory.getSuccessResult(user);
-        }   else{
+
+        } else {
             return ResultFactory.getFailResult(USER_INVALID);
         }
+
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     @Override
     public Result<List<User>> findAll(String actionUsername) {
 
-        if(actionUsername==null || "".equals(actionUsername)){
-            return ResultFactory.getFailResult(USER_INVALID);
-        }
+        if(isValidUser(actionUsername)){
 
-        User actionUser = userRepo.findOne(actionUsername);
+            return ResultFactory.getSuccessResult(userRepo.findAll());
 
-        if(actionUser == null ){
-            return ResultFactory.getFailResult("Unable to verify username [" + actionUsername + "]");
-        }  else if (actionUser.isAdmin()){
-            List<User> users = userRepo.findAll();
-            return ResultFactory.getSuccessResult(users);
         } else {
-            return ResultFactory.getFailResult("Only an admin user can view users");
-        }
 
+            return ResultFactory.getFailResult(USER_INVALID);
+
+        }
 
     }
 
@@ -152,18 +184,16 @@ public class UserServiceImpl extends AbstractService implements UserService {
     @Override
     public Result<User> findByUsernamePassword(String username, String password) {
 
-        if(username==null||password==null){
-            return ResultFactory.getFailResult("Username and password must be supplied");
-        }
+        User user = userRepo.findByUsernameAndPassword(username,password);
 
-        User user = userRepo.findOne(username);
+        if (user == null){
 
-        if(user==null){
-            return ResultFactory.getFailResult("Unable to verify username/password combination");
-        }  else if(!user.getPassword().equals(password)){
-            return ResultFactory.getFailResult("Unable to verify username/password combination");
-        }  else{
-               return ResultFactory.getSuccessResult(user);
+            return ResultFactory.getFailResult("Unable to verify user/password combination");
+
+        }   else {
+
+            return ResultFactory.getSuccessResult(user);
+
         }
 
     }

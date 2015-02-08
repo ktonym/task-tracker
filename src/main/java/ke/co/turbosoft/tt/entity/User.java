@@ -4,15 +4,18 @@ import javax.json.JsonObjectBuilder;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.Pattern;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
-public class User extends AbstractEntity{
+public class User extends AbstractEntity implements EntityItem<String>{
 	
 	@Id
 	private String username;
 	private String firstName;
 	private String lastName;
+    @Pattern(regexp = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message = "Invalid email")
 	private String email;
 	private String password;
 	private Character adminRole;
@@ -20,10 +23,18 @@ public class User extends AbstractEntity{
 	private List<TaskLog> tasklogs;
 	
 	public User() {
-		super();
 	}
 
-	public String getUsername() {
+    public User(String username, String firstName, String lastName, String email, String password, Character adminRole) {
+        this.username = username;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.adminRole = adminRole;
+    }
+
+    public String getUsername() {
 		return username;
 	}
 
@@ -93,4 +104,35 @@ public class User extends AbstractEntity{
                 .add("adminRole", adminRole+"")
                 .add("fullName", firstName + " " + lastName);
     }
+
+    @Override
+    public String getId() {
+        return username;
+    }
+
+    @Override
+    public String toString(){
+        return "ke.co.turbosoft.tt.entity.User[ username=" + username +" ]";
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (username != null ? username.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final User other = (User) obj;
+        return Objects.equals(this.username, other.username);
+    }
+
+
 }

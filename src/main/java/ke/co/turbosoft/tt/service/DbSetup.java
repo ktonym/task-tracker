@@ -45,7 +45,7 @@ public class DbSetup {
 	    esther.setUsername("mwessy");
         esther.setPassword("pass1234");
         esther.setEmail("mwessy08@gmail.com");
-        esther.setFirstName("Esther");
+        esther.setFirstName("Mwangi");
         esther.setLastName("Kipkoech");
         esther.setAdminRole("N".charAt(0));
         userRepo.save(esther);

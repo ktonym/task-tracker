@@ -19,7 +19,7 @@ Ext.define('TTT.model.User', {
             create:'user/store.json',
             read:'user/find.json',
             update:'user/store.json',
-            delete:'user/remove.json'
+            destroy:'user/remove.json'
         },
         reader: {
             type: 'json',

@@ -21,12 +21,12 @@ Ext.define("TTT.view.user.UserList", {
                 text: 'Username'
             },{
                 xtype: 'gridcolumn',
-                dataIndex: 'firstname',
+                dataIndex: 'firstName',
                 flex: 1,
                 text: 'First Name'
             },{
                 xtype: 'gridcolumn',
-                dataIndex: 'lastname',
+                dataIndex: 'lastName',
                 flex: 1,
                 text: 'Last Name'
             },{
