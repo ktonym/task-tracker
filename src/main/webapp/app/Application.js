@@ -2,9 +2,9 @@ Ext.define('TTT.Application', {
     name: 'TTT',
     extend: 'Ext.app.Application',
     requires: ['TTT.view.Viewport','TTT.view.LogonWindow'],
-    models:  ['User'],
-    controllers: ['MainController','UserController'],
-    stores: ['User'],
+    models:  ['User','Project','Task','TaskLog'],
+    controllers: ['MainController','UserController','TaskLogController'],
+    stores: ['User','Project','Task','TaskLog'],
 
     init: function(application){
         TTT.URL_PREFIX ='ttt/';

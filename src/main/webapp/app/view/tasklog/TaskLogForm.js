@@ -83,5 +83,4 @@ Ext.define("TTT.view.tasklog.TaskLogForm", {
         });
         me.callParent(arguments);
     }
-
 });
