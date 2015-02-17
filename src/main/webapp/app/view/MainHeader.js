@@ -10,6 +10,10 @@ Ext.define("TTT.view.MainHeader", {
         var me = this;
         Ext.applyIf(me,{
             items: [{
+                xtype: 'container',
+                cls: 'logo',
+                width: 300
+                }, {
                 xtype: 'toolbar',
                 flex: 1,
                 ui: 'footer',
