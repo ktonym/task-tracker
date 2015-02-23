@@ -5,7 +5,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-public class Project extends AbstractEntity {
+public class Project extends AbstractEntity implements EntityItem<Integer>{
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -63,5 +63,10 @@ public class Project extends AbstractEntity {
             company.addJson(builder);
         }
 
+    }
+
+    @Override
+    public Integer getId() {
+        return idProject;
     }
 }

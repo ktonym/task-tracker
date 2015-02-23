@@ -5,7 +5,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-public class Task extends AbstractEntity{
+public class Task extends AbstractEntity implements EntityItem<Integer>{
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -68,5 +68,10 @@ public class Task extends AbstractEntity{
 
         }
 
+    }
+
+    @Override
+    public Integer getId() {
+        return idTask;
     }
 }

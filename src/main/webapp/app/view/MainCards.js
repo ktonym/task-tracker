@@ -2,7 +2,7 @@ Ext.define("TTT.view.MainCards", {
     extend: 'Ext.container.Container',
     xtype: 'maincards',
     requires: ['Ext.layout.container.Card','TTT.view.Welcome',
-        'TTT.view.user.ManageUsers', 'TTT.view.tasklog.ManageTaskLogs'],
+        'TTT.view.user.ManageUsers', 'TTT.view.tasklog.ManageTaskLogs','TTT.view.admin.ManageTasks'],
     layout: 'card',
     initComponent: function(){
         var me = this;
@@ -16,6 +16,9 @@ Ext.define("TTT.view.MainCards", {
             },{
                 xtype: 'managetasklogs',
                 itemId: 'taskLogCard'
+            },{
+                xtype: 'managetasks',
+                itemId: 'manageTasksCard'
             }]
         });
         me.callParent(arguments);
