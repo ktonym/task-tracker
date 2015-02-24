@@ -164,4 +164,20 @@ public class ProjectServiceImpl extends AbstractService implements ProjectServic
         }
 
     }
+
+    @Override
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+    public Result<List<Project>> findByCompany(Company company, String actionUsername) {
+
+        if(isValidUser(actionUsername)){
+
+            List<Project> projectList = projectRepo.findByCompany(company);
+            return ResultFactory.getSuccessResult(projectList);
+
+        } else {
+
+            return ResultFactory.getFailResult(USER_INVALID);
+        }
+
+    }
 }

@@ -39,7 +39,7 @@ public class ProjectController extends AbstractController {
 
     }
 
-    @RequestMapping(value = "/store", method = RequestMethod.GET, produces = {"application/json"})
+    @RequestMapping(value = "/store", method = RequestMethod.POST, produces = {"application/json"})
     @ResponseBody
     public String store(
             @RequestParam(value = "data", required = true ) String jsonData,

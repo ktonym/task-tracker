@@ -148,4 +148,15 @@ public class TaskServiceImpl extends AbstractService implements TaskService {
             return ResultFactory.getFailResult(USER_INVALID);
         }
     }
+
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+    @Override
+    public Result<List<Task>> findByProject(Project project, String actionUsername) {
+        if(isValidUser(actionUsername)){
+            List<Task> taskList = taskRepo.findByProject(project);
+            return ResultFactory.getSuccessResult(taskList);
+        } else {
+            return ResultFactory.getFailResult(USER_INVALID);
+        }
+    }
 }

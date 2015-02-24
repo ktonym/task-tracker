@@ -3,6 +3,7 @@ package ke.co.turbosoft.tt.web;
 import ke.co.turbosoft.tt.entity.*;
 import ke.co.turbosoft.tt.service.CompanyService;
 import ke.co.turbosoft.tt.service.ProjectService;
+import ke.co.turbosoft.tt.service.TaskService;
 import ke.co.turbosoft.tt.vo.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,6 +29,8 @@ public class CompanyController extends AbstractController {
     protected CompanyService companyService;
     @Autowired
     protected ProjectService projectService;
+    @Autowired
+    protected TaskService taskService;
 
 	@RequestMapping(value = "/find", method = RequestMethod.GET, produces = {"application/json"})
     @ResponseBody
@@ -142,13 +145,15 @@ public class CompanyController extends AbstractController {
 
             for(Company company: ar.getData()){
 
-                List<Project> projects = company.getProjects();
+                // Made this alteration to fix the LazyInitializationException
+                List<Project> projects = projectService.findByCompany(company, sessionUser.getUsername()).getData();
 
                 JsonArrayBuilder projectChildrenArrayBuilder = Json.createArrayBuilder();
 
                 for (Project project: projects){
-
-                    List<Task> tasks = project.getTasks();
+                    /* made an alteration to fix the LazyInitializationException
+                    List<Task> tasks = project.getTasks(); */
+                    List<Task> tasks = taskService.findByProject(project, sessionUser.getUsername()).getData();
 
                     JsonArrayBuilder taskChildrenArrayBuilder = Json.createArrayBuilder();
 
@@ -215,11 +220,14 @@ public class CompanyController extends AbstractController {
             if(ar.isSuccess()){
 
                 for(Company company:ar.getData()){
+
+                    List<Project> projects = projectService.findByCompany(company, sessionUser.getUsername()).getData();
+
                     childrenArrayBuilder.add(
                             Json.createObjectBuilder()
                             .add("id", getTreeNodeId(company))
                             .add("text", company.getCompanyName())
-                            .add("leaf", company.getProjects().isEmpty())
+                            .add("leaf", projects.isEmpty())
                     );
                 }
 
@@ -232,14 +240,16 @@ public class CompanyController extends AbstractController {
             String[] idSplit = node.split("_");
             int idCompany = Integer.parseInt(idSplit[1]);
             Result<Company> ar = companyService.find(idCompany, sessionUser.getUsername());
+            List<Project> projects = projectService.findByCompany(ar.getData(),sessionUser.getUsername()).getData();
+            for(Project project : projects){
 
-            for(Project project : ar.getData().getProjects()){
+                List<Task> tasks = taskService.findByProject(project, sessionUser.getUsername()).getData();
 
                 childrenArrayBuilder.add(
                         Json.createObjectBuilder()
                         .add("id", getTreeNodeId(project))
                         .add("text", project.getProjectName())
-                        .add("leaf", project.getTasks().isEmpty())
+                        .add("leaf", tasks.isEmpty())
                 );
 
             }
@@ -249,8 +259,10 @@ public class CompanyController extends AbstractController {
             String[] idSplit = node.split("_");
             int idProject = Integer.parseInt(idSplit[1]);
             Result<Project> ar = projectService.find(idProject, sessionUser.getUsername());
+            // Not sure but I think this should fix LazyInitializationException
+            Result<List<Task>> tasks = taskService.findByProject((Project)ar.getData(),sessionUser.getUsername());
 
-            for(Task task : ar.getData().getTasks()){
+            for(Task task : tasks.getData()){
 
                 childrenArrayBuilder.add(
                         Json.createObjectBuilder()
